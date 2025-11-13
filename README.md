@@ -1,6 +1,6 @@
-# 📊 GitMetric — GitHub Repository Metrics Dashboard
+# 📊 GitMetric: GitHub Repository Metrics Dashboard
 
-GitMetric is an interactive dashboard built with **Python**, **Streamlit**, and **Plotly** that visualizes key metrics of any public GitHub repository — including commits, programming languages, pull requests, stars, forks, and watchers.  
+GitMetric is an interactive dashboard built with **Python**, **Streamlit**, and **Plotly** that visualizes key metrics of any public GitHub repository, including commits, programming languages, pull requests, stars, forks, and watchers.  
 It provides an easy way for developers and recruiters to explore a project’s activity, contributions, and trends visually.
 
 ---
