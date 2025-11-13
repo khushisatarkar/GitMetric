@@ -6,26 +6,42 @@ def create_repo_visuals(processed_data):
         st.warning("No data to visualize.")
         return
 
+    st.markdown("---")
+
     commits_df = processed_data.get("commits")
     langs = processed_data.get("languages", {})
     pulls = processed_data.get("pulls", 0)
+    stars = processed_data.get("stars", 0)
+    forks = processed_data.get("forks", 0)
+    watchers = processed_data.get("watchers", 0)
 
-    if commits_df is not None:
-        st.subheader("Commit Activity (Last 52 Weeks)")
-        fig = px.line(commits_df, x="week", y="commits", title="Commits Over Time")
-        st.plotly_chart(fig)
-    else:
-        st.info("No commit history available.")
+    with st.container():
+        col1, col2 = st.columns([1, 1], gap="large")
 
-    st.subheader("Language Usage")
-    if langs:
-        lang_fig = px.pie(names=list(langs.keys()), values=list(langs.values()), title="Language Breakdown")
-        st.plotly_chart(lang_fig)
-    else:
-        st.info("No language data available.")
+        with col1:
+            st.subheader("Commit Activity (Last 52 Weeks)")
+            if commits_df is not None and not commits_df.empty:
+                fig = px.line(commits_df, x="week", y="commits", title="Commits Over Time")
+                fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("No commit history available.")
 
-    st.metric("Total Pull Requests", pulls)
-    st.metric("⭐ Stars", processed_data["stars"])
-    st.metric("🍴 Forks", processed_data["forks"])
-    st.metric("👀 Watchers", processed_data["watchers"])
+        with col2:
+            st.subheader("Language Usage")
+            if langs:
+                lang_fig = px.pie(names=list(langs.keys()), values=list(langs.values()), title="Language Breakdown")
+                lang_fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
+                st.plotly_chart(lang_fig, use_container_width=True)
+            else:
+                st.info("No language data available.")
 
+    st.markdown("---")
+
+    metric_cols = st.columns([1, 1, 1, 1])
+    metric_cols[0].metric("Stars", stars)
+    metric_cols[1].metric("Forks", forks)
+    metric_cols[2].metric("Watchers", watchers)
+    metric_cols[3].metric("Pull Requests", pulls)
+
+    st.markdown("<br>", unsafe_allow_html=True)

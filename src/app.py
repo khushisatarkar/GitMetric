@@ -3,6 +3,8 @@ from api_client import fetch_repo_data
 from processor import process_repo_data
 from viz import create_repo_visuals
 
+st.set_page_config(page_title="GitMetric Dashboard", layout="wide")
+
 st.title("GitMetric Dashboard")
 st.sidebar.header("Repository Details")
 
@@ -16,8 +18,13 @@ if st.sidebar.button("Fetch Data"):
             if raw_data:
                 processed_data = process_repo_data(raw_data)
                 if processed_data:
+                    st.subheader(f"Repository: {username}/{repo_name}")
                     create_repo_visuals(processed_data)
                 else:
                     st.warning("No commit data found. The repository may be empty or GitHub hasn’t generated commit stats yet.")
             else:
                 st.error("Could not fetch data. Check repository name or try again.")
+    else:
+        st.warning("Please enter both username and repository name to continue.")
+else:
+    st.info("Enter a username and repository name, then click 'Fetch Data' to begin.")
