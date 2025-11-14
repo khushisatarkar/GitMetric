@@ -20,8 +20,14 @@ def create_repo_visuals(processed_data):
 
         with col1:
             st.subheader("Commit Activity (Last 52 Weeks)")
+
             if commits_df is not None and not commits_df.empty:
-                fig = px.line(commits_df, x="week", y="commits", title="Commits Over Time")
+                fig = px.line(
+                    commits_df,
+                    x="week",
+                    y="commits",
+                    title="Commits Over Time"
+                )
                 fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
                 st.plotly_chart(fig, use_container_width=True)
             else:
@@ -30,7 +36,11 @@ def create_repo_visuals(processed_data):
         with col2:
             st.subheader("Language Usage")
             if langs:
-                lang_fig = px.pie(names=list(langs.keys()), values=list(langs.values()), title="Language Breakdown")
+                lang_fig = px.pie(
+                    names=list(langs.keys()),
+                    values=list(langs.values()),
+                    title="Language Breakdown"
+                )
                 lang_fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
                 st.plotly_chart(lang_fig, use_container_width=True)
             else:
@@ -45,3 +55,43 @@ def create_repo_visuals(processed_data):
     metric_cols[3].metric("Pull Requests", pulls)
 
     st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    st.subheader("Contributor Insights")
+
+    col5, col6 = st.columns([1, 1], gap="large")
+    with col5:
+        st.subheader("Top Contributors")
+        if commits_df is not None and "author" in commits_df.columns:
+            contributor_df = commits_df["author"].value_counts().reset_index()
+            contributor_df.columns = ["author", "commits"]
+
+            contrib_fig = px.bar(
+                contributor_df,
+                x="author",
+                y="commits",
+                title="Commits per Contributor"
+            )
+            contrib_fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
+            st.plotly_chart(contrib_fig, use_container_width=True)
+        else:
+            st.info("No contributor data available.")
+
+    with col6:
+        st.subheader("File Type Distribution")
+        files_df = processed_data.get("files")
+
+        if files_df is not None and "extension" in files_df.columns:
+            ext_counts = files_df["extension"].value_counts().reset_index()
+            ext_counts.columns = ["extension", "count"]
+
+            ext_fig = px.pie(
+                ext_counts,
+                names="extension",
+                values="count",
+                title="File Extension Breakdown"
+            )
+            ext_fig.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20))
+            st.plotly_chart(ext_fig, use_container_width=True)
+        else:
+            st.info("No file extension data available.")
