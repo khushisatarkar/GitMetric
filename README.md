@@ -26,6 +26,15 @@ It provides an easy way for developers and recruiters to explore a project’s a
 
 ---
 
+## 🔜 Planned Enhancements
+
+- pull request and issue analytics
+- repo health scoring
+- exportable reports (PDF/CSV/MD)
+- dark/light theme toggle
+- mobile-responsive UI
+- compare two repos side-by-side
+
 ## 🙋‍♀️ Developed by
 Khushi Satarkar
 
